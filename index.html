@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="common.css" rel="stylesheet" />
+    <link href="index.css" rel="stylesheet" />
+
+    <style>
+    </style>
+    <script src="move.js"></script>
+    <script src="jquery-1.7.2.js"></script>
+    <script src="common.js"></script>
+    <script>
+        //回到顶部
+        function backToTop(obj){
+            window.onscroll=function(){
+                obj.onclick=function(){
+                    var sT=document.documentElement.scrollTop||document.body.scrollTop;
+                    var dis=0-sT;
+                    var time=1000;
+                    var count=Math.floor(time/30);
+                    var n=0;
+                    clearInterval(obj.timer);
+                    obj.timer=setInterval(function(){
+                        n++;
+                        document.documentElement.scrollTop=document.body.scrollTop=sT+n*dis/count;
+                        if(n==count){
+                            clearInterval(timer);
+                        }
+                    },30);
+                };
+            };
+        }
+
+        function getDir(obj,ev){
+            var x=obj.offsetLeft+obj.offsetWidth/2-ev.pageX;
+            var y=obj.offsetTop+obj.offsetHeight/2-ev.pageY;
+
+            return Math.round((Math.atan2(y,x)*180/Math.PI+180)/90)%4;
+        }
+        function through(obj){
+            var oS=obj.children[0];
+
+            obj.onmouseenter=function(ev){
+                var oEvent=ev ||event;
+
+                var dir=getDir(this,oEvent);
+
+                switch (dir){
+                    case 0:
+                        oS.style.top=0+'px';
+                        oS.style.left=200+'px';
+                        break;
+                    case 1:
+                        oS.style.top=200+'px';
+                        oS.style.left=0+'px';
+                        break;
+                    case 2:
+                        oS.style.top=0+'px';
+                        oS.style.left=-200+'px';
+                        break;
+                    case 3:
+                        oS.style.top=-200+'px';
+                        oS.style.left=0+'px';
+                        break;
+                }
+
+                move(oS,{left:0,top:0},{duration:800});
+            };
+
+            obj.onmouseleave=function(ev){
+                var oEvent=ev ||event;
+
+                var dir=getDir(this,oEvent);
+
+                switch (dir){
+                    case 0:
+                        move(oS,{top:0,left:200},{duration:800});
+                        break;
+                    case 1:
+                        move(oS,{top:200,left:0},{duration:800});
+                        break;
+                    case 2:
+                        move(oS,{top:0,left:-200},{duration:800});
+                        break;
+                    case 3:
+                        move(oS,{top:-200,left:0},{duration:800});
+                        break;
+                }
+            }
+        }
+        window.onload = function () {
+            /*var oNav=document.getElementById('nav');*/
+            var oBanner=document.getElementById('banner');
+            var oBack=document.getElementById('goTop');
+            var oThrough=document.getElementById('through');
+            var oLast=document.getElementById('last');
+            //三频设置宽
+            oBanner.style.height=document.documentElement.clientHeight+'px';
+            oThrough.style.height=document.documentElement.clientHeight+'px';
+            oLast.style.height=document.documentElement.clientHeight+'px';
+            //回到顶部
+            backToTop(oBack);
+
+            //侧栏导航
+            var osideNav=document.getElementById('sideNav');
+            osideNav.onmouseenter=function(){
+                move(osideNav,{right:'0'},{duration:300});
+            };
+            osideNav.onmouseleave=function(){
+                move(osideNav,{right:'-80'},{duration:300});
+            };
+
+            //穿墙
+            var aUl=oThrough.getElementsByTagName('ul');
+            for(var i=0;i<aUl.length; i++){
+                through(aUl[i]);
+            }
+
+
+     };
+    </script>
+</head>
+<body>
+<!--banner-->
+<div class="banner" id="banner">
+</div>
+
+<!--穿墙-->
+<div class="through" id="through">
+   <div class="wraper">
+       <ul>
+           <li>111</li>
+       </ul>
+       <ul>
+           <li>222</li>
+       </ul>
+       <ul>
+           <li>333</li>
+       </ul>
+       <ul>
+           <li>444</li>
+       </ul>
+       <ul>
+           <li>555</li>
+       </ul>
+       <ul>
+           <li>666</li>
+       </ul>
+       <ul>
+           <li>777</li>
+       </ul>
+       <ul>
+           <li>888</li>
+       </ul>
+       <ul>
+           <li>9999</li>
+       </ul>
+       <ul>
+           <li>1010</li>
+       </ul>
+   </div>
+</div>
+
+<div id="last">
+
+</div>
+
+<!--回到顶部-->
+<div id="goTop">回到顶部</div>
+
+<div class="sideNav" id="sideNav">
+    <div><a href="javascript:;"></a></div>
+</div>
+</body>
+</html>

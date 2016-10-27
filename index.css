@@ -1,0 +1,53 @@
+
+.wraper{width:1100px; margin:0 auto;}
+#goTop{ width: 25px;
+    height: 25px;
+    background: #4b9dff;
+    position: fixed;
+    right: 0;
+    bottom: 40px;
+    z-index:999;
+}
+.sideNav{
+    position:fixed;
+    top:200px;
+    right:-80px;
+    height:200px;
+    width:100px;
+    background: #f2f75c;
+    opacity: 0.5;
+    border-radius: 20px;
+}
+
+.banner {
+    width:100%;
+    background: #75839D;
+}
+/*穿墙*/
+.through{
+    width:100%;
+    background-color:#5e5e5e;
+}
+#last{
+    width:100%;
+    background-color: #b1b8d5;
+}
+#through ul{
+    width:200px;
+    height:200px;
+    background: #f4e83e;
+    position: relative;
+    margin: 10px;
+    overflow: hidden;
+    float:left;
+    margin-top:30px;
+}
+#through ul li{
+    width:200px;
+    height:200px;
+    background: #ff8236;
+    position:absolute;
+    top:0;
+    left:-200px;
+
+}

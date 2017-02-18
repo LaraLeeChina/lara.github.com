@@ -10,29 +10,9 @@
     </style>
     <script src="move.js"></script>
     <script src="jquery-1.7.2.js"></script>
+    <script src=""></script>
     <script src="common.js"></script>
     <script>
-        //回到顶部
-        function backToTop(obj){
-            window.onscroll=function(){
-                obj.onclick=function(){
-                    var sT=document.documentElement.scrollTop||document.body.scrollTop;
-                    var dis=0-sT;
-                    var time=1000;
-                    var count=Math.floor(time/30);
-                    var n=0;
-                    clearInterval(obj.timer);
-                    obj.timer=setInterval(function(){
-                        n++;
-                        document.documentElement.scrollTop=document.body.scrollTop=sT+n*dis/count;
-                        if(n==count){
-                            clearInterval(timer);
-                        }
-                    },30);
-                };
-            };
-        }
-
         function getDir(obj,ev){
             var x=obj.offsetLeft+obj.offsetWidth/2-ev.pageX;
             var y=obj.offsetTop+obj.offsetHeight/2-ev.pageY;
@@ -41,12 +21,9 @@
         }
         function through(obj){
             var oS=obj.children[0];
-
             obj.onmouseenter=function(ev){
                 var oEvent=ev ||event;
-
                 var dir=getDir(this,oEvent);
-
                 switch (dir){
                     case 0:
                         oS.style.top=0+'px';
@@ -65,15 +42,12 @@
                         oS.style.left=0+'px';
                         break;
                 }
-
                 move(oS,{left:0,top:0},{duration:800});
             };
 
             obj.onmouseleave=function(ev){
                 var oEvent=ev ||event;
-
                 var dir=getDir(this,oEvent);
-
                 switch (dir){
                     case 0:
                         move(oS,{top:0,left:200},{duration:800});
@@ -90,44 +64,102 @@
                 }
             }
         }
-        window.onload = function () {
+    window.onload = function () {
             /*var oNav=document.getElementById('nav');*/
             var oBanner=document.getElementById('banner');
             var oBack=document.getElementById('goTop');
             var oThrough=document.getElementById('through');
-            var oLast=document.getElementById('last');
-            //三频设置宽
+            var oThird=document.getElementById('third');
+            var oPlane=document.getElementById('plane');
+
+
+            //三屏设置宽
             oBanner.style.height=document.documentElement.clientHeight+'px';
             oThrough.style.height=document.documentElement.clientHeight+'px';
-            oLast.style.height=document.documentElement.clientHeight+'px';
-            //回到顶部
-            backToTop(oBack);
+            oThird.style.height=document.documentElement.clientHeight+'px';
+            oPlane.style.height=document.documentElement.clientHeight+'px';
 
-            //侧栏导航
-            var osideNav=document.getElementById('sideNav');
-            osideNav.onmouseenter=function(){
-                move(osideNav,{right:'0'},{duration:300});
+            //回到顶部
+                $(window).scroll(function() {
+                    if($(window).scrollTop() >= 100){
+                        $('.actGotop').fadeIn(300);
+                    }else{
+                        $('.actGotop').fadeOut(300);
+                    }
+                });
+                $('.actGotop').click(function(){
+                    $('html,body').animate({scrollTop: '0px'}, 800);});
+
+
+
+            //吸顶条
+            var oTopBar=document.getElementById('topbar');
+            var oTopHidden=document.getElementById('topbar_hidden');
+            var oBarT=oTopBar.offsetTop;
+            window.onscroll= function () {
+                var oST=document.documentElement.scrollTop || document.body.scrollTop;
+                if(oST>oBarT-20){
+
+                    oTopBar.style.position='fixed';
+                    oTopBar.style.zIndex='999';
+                    oTopHidden.style.display='block';
+
+                }else{
+                    oTopBar.style.position='';
+                    oTopHidden.style.display='none';
+                }
             };
-            osideNav.onmouseleave=function(){
-                move(osideNav,{right:'-80'},{duration:300});
-            };
+
+            //开场效果
+        var oCircle=document.getElementById('circle');
+        var oPlaneImg=document.getElementById('planeimg');
+        var oCImg=oCircle.children[0];
+        oCircle.onclick=function(){
+            oCircle.style.transition='2.5s all ease-in';
+            oCircle.style.transform='scale(13)';
+            oCImg.style.display='none';
+            oCircle.addEventListener('transitionend',function(){
+                oCircle.innerHTML='';
+                oPlaneImg.style.transition='1s all ease-out';
+                oPlaneImg.style.transform='scale(3) translate(-150px, 60px)';
+
+            },false);
+        };
 
             //穿墙
             var aUl=oThrough.getElementsByTagName('ul');
             for(var i=0;i<aUl.length; i++){
                 through(aUl[i]);
             }
-
-
      };
     </script>
 </head>
 <body>
-<!--banner-->
-<div class="banner" id="banner">
+<!-- 飞机飞入-->
+<div class="plane" id="plane">
+    <div class="circle" id="circle"><img width="140" height="140" src="img/loading-Home.gif" /></div>
+    <img id="planeimg" src="img/plane.png" />
+    <img src="img/propeller.png" id="propeller" />
 </div>
 
-<!--穿墙-->
+<!--banner 第一屏-->
+<a name="first"> </a>
+<div class="banner" id="banner">
+
+</div>
+
+<div class="topbar" id="topbar">
+    <ul>
+        <li><a href="#first">第一屏</a></li>
+        <li><a href="#sec">第二屏</a></li>
+        <li><a href="#third">第三屏</a></li>
+        <li><a href="#footer">联系我</a></li>
+    </ul>
+</div>
+<div class="topbar_hidden" id="topbar_hidden"></div>
+
+<!--穿墙 第二屏-->
+<a name="sec"> </a>
 <div class="through" id="through">
    <div class="wraper">
        <ul>
@@ -163,15 +195,32 @@
    </div>
 </div>
 
-<div id="last">
+<!-- 第三屏-->
+<a name="third"> </a>
+<div id="third">
 
+</div>
+
+<!-- footer-->
+<a name="footer"> </a>
+<div id="footer">
 </div>
 
 <!--回到顶部-->
-<div id="goTop">回到顶部</div>
+<div class="actGotop"><a href="javascript:;" title="返回顶部"></a></div>
 
+<!--侧栏导航-->
+<!--
 <div class="sideNav" id="sideNav">
-    <div><a href="javascript:;"></a></div>
+    <ul>
+        <li><a href="#first">第一屏</a></li>
+        <li><a href="#sec">第二屏</a></li>
+        <li><a href="#third">第三屏</a></li>
+        <li><a href="#footer">联系我</a></li>
+    </ul>
 </div>
+-->
+
+
 </body>
 </html>
